@@ -10,18 +10,18 @@
     <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.en.html</PackageLicenseUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Cave.Auth.snk</AssemblyOriginatorKeyFile>
-    <Version>1.0.0-alpha-$(Configuration.ToLower())-1</Version>
+    <Version>1.0.0</Version>
     <PackageIconUrl>https://www.cavesystems.de/favicon.ico</PackageIconUrl>
     <PackageTags>CaveSystems Auth</PackageTags>
     <PackageProjectUrl>https://www.cavesystems.de</PackageProjectUrl>
-    <PackageReleaseNotes>Aktueller Release Candidate 2018</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <Description>CaveSystems Auth Bibliothek</Description>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Cave.Auth.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <FileVersion>2018.1127.2119.3010</FileVersion>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>2018.1215.1223.1946</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>pdbonly</DebugType>
@@ -71,14 +71,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20' OR '$(TargetFramework)'=='netstandard1.3'">
-    <PackageReference Include="Cave.Backports" Version="1.0.0-alpha-release-1" />
+    <PackageReference Include="Cave.Backports" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Cave.Extensions" Version="1.0.0-alpha-release-4" />
-    <PackageReference Include="Cave.Data" Version="1.0.0-alpha-release-2" />
-    <PackageReference Include="Cave.IO" Version="1.0.0-alpha-release-6" />
-    <PackageReference Include="Cave.Mail" Version="1.0.0-alpha-release-1" />
-    <PackageReference Include="Cave.Net" Version="1.0.0-alpha-release-1" />
+    <PackageReference Include="Cave.Extensions" Version="1.0.0" />
+    <PackageReference Include="Cave.Data" Version="1.0.0" />
+    <PackageReference Include="Cave.IO" Version="1.0.0" />
+    <PackageReference Include="Cave.Mail" Version="1.0.0" />
+    <PackageReference Include="Cave.Net" Version="1.0.0" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
   </ItemGroup>
 </Project>

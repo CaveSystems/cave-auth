@@ -1,48 +1,9 @@
-﻿#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion License
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
- */
-#endregion Authors & Contributors
-
-using Cave.Collections.Generic;
-using Cave.Net;
-using Cave.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using Cave.Collections.Generic;
+using Cave.Net;
 
 namespace Cave.Auth
 {
@@ -68,10 +29,16 @@ namespace Cave.Auth
         static void CleanUsed()
         {
             long start = GetChallenge() - DriftPast;
-            foreach (var item in used.ToArray())
+            foreach (KeyValuePair<string, long> item in used.ToArray())
             {
                 //throw away old used codes before drift
-                if (item.Value < start) if (!used.Remove(item.Key)) throw new KeyNotFoundException();
+                if (item.Value < start)
+                {
+                    if (!used.Remove(item.Key))
+                    {
+                        throw new KeyNotFoundException();
+                    }
+                }
             }
         }
 
@@ -89,14 +56,14 @@ namespace Cave.Auth
             }
 
             //truncate secret
-            var key = Base32.OTP.Decode(secret.ToLower());
+            byte[] key = Base32.OTP.Decode(secret.ToLower());
             for (int i = secret.Length; i < key.Length; i++)
             {
                 key[i] = 0;
             }
 
             HMACSHA1 mac = new HMACSHA1(key);
-            var hash = mac.ComputeHash(challengeData);
+            byte[] hash = mac.ComputeHash(challengeData);
 
             int offset = hash[hash.Length - 1] & 0xf;
 
@@ -147,7 +114,10 @@ namespace Cave.Auth
         public static bool CheckCode(string secret, string code)
         {
             CleanUsed();
-            if (used.ContainsKey(code)) return false;
+            if (used.ContainsKey(code))
+            {
+                return false;
+            }
 
             long challenge = GetChallenge();
             for (long i = challenge - DriftPast; i <= challenge + DriftFuture; i++)
@@ -169,8 +139,16 @@ namespace Cave.Auth
         /// <returns></returns>
         public static string GetGoogleQRLink(string secret, string company = null, string product = null, int size = 250)
         {
-            if (company == null) company = AssemblyVersionInfo.Program.Company;
-            if (product == null) product = AssemblyVersionInfo.Program.Product;
+            if (company == null)
+            {
+                company = AssemblyVersionInfo.Program.Company;
+            }
+
+            if (product == null)
+            {
+                product = AssemblyVersionInfo.Program.Product;
+            }
+
             return $"https://chart.googleapis.com/chart?cht=qr&chs=500x500&chld=H&chl=otpauth://totp/{product}?secret={secret}%26issuer={company}";
         }
 

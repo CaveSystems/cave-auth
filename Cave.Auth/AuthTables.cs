@@ -1,49 +1,3 @@
-#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
- */
-#endregion
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -58,7 +12,7 @@ namespace Cave.Auth
     /// Provides user validation tables and functions
     /// </summary>
     public class AuthTables : TableConnector
-	{
+    {
         //TODO use better RNG implementation
         internal static readonly Random RNG = new Random();
 
@@ -66,8 +20,8 @@ namespace Cave.Auth
         private ITable<User> m_Users;
         private ITable<UserDetail> m_UserDetails;
         private ITable<UserSession> m_UserSessions;
-		private ITable<UserSessionData> m_UserSessionData;
-		private ITable<UserSessionLicense> m_UserSessionLicenses;
+        private ITable<UserSessionData> m_UserSessionData;
+        private ITable<UserSessionLicense> m_UserSessionLicenses;
         private ITable<License> m_Licenses;
         private ITable<Group> m_Groups;
         private ITable<GroupMember> m_GroupMembers;
@@ -85,7 +39,11 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_Users == null) ConnectTable(ref m_Users);
+                if (m_Users == null)
+                {
+                    ConnectTable(ref m_Users);
+                }
+
                 return m_Users;
             }
         }
@@ -96,7 +54,11 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_UserConfigurations == null) ConnectTable(ref m_UserConfigurations);
+                if (m_UserConfigurations == null)
+                {
+                    ConnectTable(ref m_UserConfigurations);
+                }
+
                 return m_UserConfigurations;
             }
         }
@@ -107,7 +69,11 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_UserDetails == null) ConnectTable(ref m_UserDetails);
+                if (m_UserDetails == null)
+                {
+                    ConnectTable(ref m_UserDetails);
+                }
+
                 return m_UserDetails;
             }
         }
@@ -118,29 +84,41 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_UserSessions == null) ConnectTable(ref m_UserSessions);
+                if (m_UserSessions == null)
+                {
+                    ConnectTable(ref m_UserSessions);
+                }
+
                 return m_UserSessions;
             }
         }
 
-		/// <summary>Accesses the user session data table.</summary>
-		/// <value>The user session data.</value>
-		public ITable<UserSessionData> UserSessionData
-		{
-			get
-			{
-				if (m_UserSessionData == null) ConnectTable(ref m_UserSessionData);
-				return m_UserSessionData;
-			}
-		}
-
-		/// <summary>Accesses the user session license table.</summary>
-		/// <value>The user session licenses.</value>
-		public ITable<UserSessionLicense> UserSessionLicenses
+        /// <summary>Accesses the user session data table.</summary>
+        /// <value>The user session data.</value>
+        public ITable<UserSessionData> UserSessionData
         {
             get
             {
-                if (m_UserSessionLicenses == null) ConnectTable(ref m_UserSessionLicenses);
+                if (m_UserSessionData == null)
+                {
+                    ConnectTable(ref m_UserSessionData);
+                }
+
+                return m_UserSessionData;
+            }
+        }
+
+        /// <summary>Accesses the user session license table.</summary>
+        /// <value>The user session licenses.</value>
+        public ITable<UserSessionLicense> UserSessionLicenses
+        {
+            get
+            {
+                if (m_UserSessionLicenses == null)
+                {
+                    ConnectTable(ref m_UserSessionLicenses);
+                }
+
                 return m_UserSessionLicenses;
             }
         }
@@ -151,7 +129,11 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_Licenses == null) ConnectTable(ref m_Licenses);
+                if (m_Licenses == null)
+                {
+                    ConnectTable(ref m_Licenses);
+                }
+
                 return m_Licenses;
             }
         }
@@ -162,7 +144,11 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_Groups == null) ConnectTable(ref m_Groups);
+                if (m_Groups == null)
+                {
+                    ConnectTable(ref m_Groups);
+                }
+
                 return m_Groups;
             }
         }
@@ -173,7 +159,11 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_GroupMembers == null) ConnectTable(ref m_GroupMembers);
+                if (m_GroupMembers == null)
+                {
+                    ConnectTable(ref m_GroupMembers);
+                }
+
                 return m_GroupMembers;
             }
         }
@@ -184,7 +174,11 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_PhoneNumbers == null) ConnectTable(ref m_PhoneNumbers);
+                if (m_PhoneNumbers == null)
+                {
+                    ConnectTable(ref m_PhoneNumbers);
+                }
+
                 return m_PhoneNumbers;
             }
         }
@@ -195,7 +189,11 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_EmailAddresses == null) ConnectTable(ref m_EmailAddresses);
+                if (m_EmailAddresses == null)
+                {
+                    ConnectTable(ref m_EmailAddresses);
+                }
+
                 return m_EmailAddresses;
             }
         }
@@ -206,7 +204,11 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_Addresses == null) ConnectTable(ref m_Addresses);
+                if (m_Addresses == null)
+                {
+                    ConnectTable(ref m_Addresses);
+                }
+
                 return m_Addresses;
             }
         }
@@ -217,7 +219,11 @@ namespace Cave.Auth
         {
             get
             {
-				if (m_Countries == null) ConnectTable(ref m_Countries);
+                if (m_Countries == null)
+                {
+                    ConnectTable(ref m_Countries);
+                }
+
                 return m_Countries;
             }
         }
@@ -228,7 +234,11 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_Software == null) ConnectTable(ref m_Software);
+                if (m_Software == null)
+                {
+                    ConnectTable(ref m_Software);
+                }
+
                 return m_Software;
             }
         }
@@ -239,78 +249,76 @@ namespace Cave.Auth
         {
             get
             {
-                if (m_SoftwareSessions == null) ConnectTable(ref m_SoftwareSessions);
+                if (m_SoftwareSessions == null)
+                {
+                    ConnectTable(ref m_SoftwareSessions);
+                }
+
                 return m_SoftwareSessions;
             }
         }
 
         /// <summary>Gets the name of the log source.</summary>
         /// <value>The name of the log source.</value>
-        public override string LogSourceName { get { return "AuthTables"; } }
+        public override string LogSourceName => "AuthTables";
 
-		/// <summary>
-		/// Loads all .net cultures into the countries table
-		/// </summary>
-		public void LoadCultures()
-		{
-			var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-			if (m_Countries.RowCount != cultures.Length)
-			{
-				m_Countries.Clear();
-				foreach (CultureInfo c in cultures)
-				{
-					string name = string.IsNullOrEmpty(c.Name) ? "-" : c.Name;
-					m_Countries.Replace(new Country()
-					{
-						ID = CaveSystemData.CalculateID(name),
-						Code = (uint)c.LCID,
-						ISO3 = c.ThreeLetterISOLanguageName,
-						ISO2 = c.TwoLetterISOLanguageName,
-						Name = c.Name,
-						NativeName = c.NativeName,
-						EnglishName = c.EnglishName,
-					});
-				}
-			}
-		}
+        /// <summary>
+        /// Loads all .net cultures into the countries table
+        /// </summary>
+        public void LoadCultures()
+        {
+            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+            if (m_Countries.RowCount != cultures.Length)
+            {
+                m_Countries.Clear();
+                foreach (CultureInfo c in cultures)
+                {
+                    string name = string.IsNullOrEmpty(c.Name) ? "-" : c.Name;
+                    m_Countries.Replace(new Country()
+                    {
+                        ID = CaveSystemData.CalculateID(name),
+                        Code = (uint)c.LCID,
+                        ISO3 = c.ThreeLetterISOLanguageName,
+                        ISO2 = c.TwoLetterISOLanguageName,
+                        Name = c.Name,
+                        NativeName = c.NativeName,
+                        EnglishName = c.EnglishName,
+                    });
+                }
+            }
+        }
 
         /// <summary>Gets all tables of this instance.</summary>
         /// <value>The tables.</value>
-        public override ITable[] Tables
-        {
-            get
-            {
-                return new ITable[]
+        public override ITable[] Tables => new ITable[]
                 {
                     Users, Groups, GroupMembers, PhoneNumbers, EmailAddresses, Addresses, Countries, Software, SoftwareSessions,
                     UserSessions, UserSessionData, UserSessionLicenses, Licenses, UserDetails, UserConfigurations,
                 };
-            }
-        }
 
         /// <summary>Initializes this instance.</summary>
         public AuthTables()
         {
         }
 
-        #endregion        
+        #endregion
 
-		/// <summary>Creates a new user without password (unconfirmed user).</summary>
-		/// <param name="userName">(Nick)Name of the user to create</param>
-		/// <param name="emailAddress">The email address.</param>
-		/// <param name="email">Returns the email dataset.</param>
-		/// <param name="user">Returns the user dataset.</param>
-		/// <exception cref="ArgumentException">
-		/// UserName or EmailAddress missing!
-		/// or
-		/// Invalid characters at user name!
-		/// or
-		/// Invalid characters at email address!
-		/// or
-		/// Username/Email address is already registered!
-		/// </exception>
-		/// <exception cref="System.ArgumentNullException">UserName</exception>
-		public void CreateUser(string userName, string emailAddress, out EmailAddress email, out User user)
+        /// <summary>Creates a new user without password (unconfirmed user).</summary>
+        /// <param name="userName">(Nick)Name of the user to create</param>
+        /// <param name="emailAddress">The email address.</param>
+        /// <param name="email">Returns the email dataset.</param>
+        /// <param name="user">Returns the user dataset.</param>
+        /// <exception cref="ArgumentException">
+        /// UserName or EmailAddress missing!
+        /// or
+        /// Invalid characters at user name!
+        /// or
+        /// Invalid characters at email address!
+        /// or
+        /// Username/Email address is already registered!
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">UserName</exception>
+        public void CreateUser(string userName, string emailAddress, out EmailAddress email, out User user)
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(emailAddress))
             {
@@ -318,26 +326,26 @@ namespace Cave.Auth
             }
             if (userName.HasInvalidChars(ASCII.Strings.SafeName))
             {
-				throw new ArgumentException("Invalid characters at user name!");
+                throw new ArgumentException("Invalid characters at user name!");
             }
             if (emailAddress.HasInvalidChars(ASCII.Strings.SafeName))
             {
-				throw new ArgumentException("Invalid characters at email address!");
+                throw new ArgumentException("Invalid characters at email address!");
             }
             if (EmailAddresses.Exist(Search.FieldLike(nameof(EmailAddress.Address), emailAddress)))
             {
-				throw new ArgumentException("Username/Email address is already registered!");
+                throw new ArgumentException("Username/Email address is already registered!");
             }
-			user = new User()
-			{
-				State = UserState.New,
-				NickName = userName,
-				AvatarID = (uint)(RNG.Next() << 1 ^ RNG.Next()),
-				Color = 0xFF000000 | (uint)RNG.Next(0, 0xFFFFFF),
-			};
+            user = new User()
+            {
+                State = UserState.New,
+                NickName = userName,
+                AvatarID = (uint)(RNG.Next() << 1 ^ RNG.Next()),
+                Color = 0xFF000000 | (uint)RNG.Next(0, 0xFFFFFF),
+            };
             user.SetRandomSalt();
             user.ID = Users.Insert(user);
-			
+
             if (string.IsNullOrEmpty(emailAddress))
             {
                 email = new EmailAddress();
@@ -351,23 +359,23 @@ namespace Cave.Auth
             }
         }
 
-		/// <summary>Resets the password.</summary>
-		/// <param name="emailAddress">The email address.</param>
-		/// <param name="email">The email.</param>
-		/// <param name="user">The user.</param>
-		/// <exception cref="ArgumentException">
-		/// Email address {0} not unique, please contact support!
-		/// or
-		/// Password reset email was already sent within the last hour.
-		/// or
-		/// Invalid Emailaddress!
-		/// </exception>
-		public void RequestPasswordReset(string emailAddress, out EmailAddress email, out User user)
+        /// <summary>Resets the password.</summary>
+        /// <param name="emailAddress">The email address.</param>
+        /// <param name="email">The email.</param>
+        /// <param name="user">The user.</param>
+        /// <exception cref="ArgumentException">
+        /// Email address {0} not unique, please contact support!
+        /// or
+        /// Password reset email was already sent within the last hour.
+        /// or
+        /// Invalid Emailaddress!
+        /// </exception>
+        public void RequestPasswordReset(string emailAddress, out EmailAddress email, out User user)
         {
-            var addresses = EmailAddresses.GetStructs(nameof(EmailAddress.Address), emailAddress);
+            List<EmailAddress> addresses = EmailAddresses.GetStructs(nameof(EmailAddress.Address), emailAddress);
             if (addresses.Count > 1)
             {
-				throw new ArgumentException("Email address {0} not unique, please contact support!", emailAddress);
+                throw new ArgumentException("Email address {0} not unique, please contact support!", emailAddress);
             }
             if (addresses.Count == 1)
             {
@@ -382,10 +390,10 @@ namespace Cave.Auth
                             allowReset = (DateTime.UtcNow > user.LastUpdate + TimeSpan.FromHours(1));
                             if (!allowReset)
                             {
-								throw new ArgumentException("Password reset email was already sent within the last hour.");
+                                throw new ArgumentException("Password reset email was already sent within the last hour.");
                             }
                             break;
-						default: throw new ArgumentNullException("Invalid user state!");
+                        default: throw new ArgumentNullException("Invalid user state!");
                     }
                     if (allowReset)
                     {
@@ -400,30 +408,30 @@ namespace Cave.Auth
                     }
                 }
             }
-			throw new ArgumentException("Invalid Emailaddress!");
+            throw new ArgumentException("Invalid Emailaddress!");
         }
 
-		/// <summary>Creates a new user with the given password.</summary>
-		/// <param name="userName">(Nick)Name of the user to create</param>
-		/// <param name="emailAddress">The email address.</param>
-		/// <param name="password">The password.</param>
-		/// <param name="state">State of the user.</param>
-		/// <param name="level">The level.</param>
-		/// <param name="user">The user.</param>
-		/// <param name="email">The email.</param>
-		/// <exception cref="ArgumentException">UserName or EmailAddress missing!</exception>
-		/// <remarks>Users with state <see cref="UserState.Confirmed" /> automatically gets confirmed.</remarks>
-		public void CreateUser(string userName, string emailAddress, string password, UserState state, IConvertible level, out User user, out EmailAddress email)
+        /// <summary>Creates a new user with the given password.</summary>
+        /// <param name="userName">(Nick)Name of the user to create</param>
+        /// <param name="emailAddress">The email address.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="state">State of the user.</param>
+        /// <param name="level">The level.</param>
+        /// <param name="user">The user.</param>
+        /// <param name="email">The email.</param>
+        /// <exception cref="ArgumentException">UserName or EmailAddress missing!</exception>
+        /// <remarks>Users with state <see cref="UserState.Confirmed" /> automatically gets confirmed.</remarks>
+        public void CreateUser(string userName, string emailAddress, string password, UserState state, IConvertible level, out User user, out EmailAddress email)
         {
             if (string.IsNullOrEmpty(userName))
             {
-				throw new ArgumentException("UserName or EmailAddress missing!");
+                throw new ArgumentException("UserName or EmailAddress missing!");
             }
-			user = new User()
-			{
-				State = state,
-				NickName = userName,
-				AuthLevel = level.ToInt32(CultureInfo.InvariantCulture),
+            user = new User()
+            {
+                State = state,
+                NickName = userName,
+                AuthLevel = level.ToInt32(CultureInfo.InvariantCulture),
                 AvatarID = (uint)(RNG.Next() << 1 ^ RNG.Next()),
                 Color = 0xFF000000 | (uint)RNG.Next(0, 0xFFFFFF),
             };
@@ -439,7 +447,7 @@ namespace Cave.Auth
                 email = new EmailAddress()
                 {
                     UserID = user.ID,
-                    Address = emailAddress, 
+                    Address = emailAddress,
                     Verified = state == UserState.Confirmed,
                 };
                 email.ID = EmailAddresses.Insert(email);
@@ -472,8 +480,16 @@ namespace Cave.Auth
         /// <param name="email">The email address.</param>
         public void Update(ref User user, ref EmailAddress email)
         {
-            if (user.ID <= 0) throw new Exception("Invalid User.ID");
-            if (email.ID <= 0) throw new Exception("Invalid Email.ID");
+            if (user.ID <= 0)
+            {
+                throw new Exception("Invalid User.ID");
+            }
+
+            if (email.ID <= 0)
+            {
+                throw new Exception("Invalid Email.ID");
+            }
+
             user.LastUpdate = DateTime.UtcNow;
             Users.Update(user);
             EmailAddresses.Update(email);
@@ -489,103 +505,103 @@ namespace Cave.Auth
             email.ID = EmailAddresses.Insert(email);
             return true;
         }
-		
-		/// <summary>Performs a login checking the password.</summary>
-		/// <param name="login">The login.</param>
-		/// <param name="password">The password.</param>
-		/// <param name="user">The user.</param>
-		/// <param name="email">The email.</param>
-		/// <returns></returns>
-		public bool Login(string login, string password, out User user, out EmailAddress email)
-		{
-			var emailAddresses = EmailAddresses.GetStructs(
-				Search.FieldEquals(nameof(EmailAddress.Address), login) &
-				Search.FieldEquals(nameof(EmailAddress.Verified), true));
-			foreach (var emailAddress in emailAddresses)
-			{
-				user = Users.TryGetStruct(emailAddress.UserID);
-				if (user.ID == 0)
-				{
-					EmailAddresses.Delete(emailAddress.ID);
-					continue;
-				}
-				if (user.TestPassword(password))
-				{
-					email = emailAddress;
-					switch (user.State)
-					{
-						case UserState.PasswordResetRequested: user.State = UserState.Confirmed; break;
-						case UserState.Confirmed: break;
-						case UserState.New: throw new ArgumentException("Account needs to be verified prior usage!");
-						case UserState.Diabled: throw new ArgumentException("Account is disabled. Please contact support.");
-						case UserState.Deleted: throw new ArgumentException("Invalid Account.");
-						default: throw new ArgumentException("Unknown user state!");
-					}
-					if (email.VerificationCode != null)
-					{
-						email.VerificationCode = null;
-						Task.Factory.StartNew((e) => EmailAddresses.TryUpdate((EmailAddress)e), email);
-					}
-					user.LastUpdate = DateTime.UtcNow;
-					user.InvalidLogonTries = 0;
-					Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
-					return true;
-				}
-				user.InvalidLogonTries++;
-				user.LastUpdate = DateTime.UtcNow;
-				if (Users is IMemoryTable)
-				{
-					Users.TryUpdate(user);
-				}
-				else
-				{
-					Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
-				}
-			}
-			foreach (var userDataset in Users.GetStructs(nameof(User.NickName), login))
-			{
-				user = userDataset;
-				if (user.TestPassword(password))
-				{
-					email = EmailAddresses.TryGetStruct(
-						Search.FieldEquals(nameof(EmailAddress.UserID), user.ID) &
-						Search.FieldEquals(nameof(EmailAddress.Verified), true));
-					switch (user.State)
-					{
-						case UserState.PasswordResetRequested: user.State = UserState.Confirmed; break;
-						case UserState.Confirmed: break;
-						case UserState.New: throw new ArgumentException("Account needs to be verified prior usage!");
-						case UserState.Diabled: throw new ArgumentException("Account is disabled. Please contact support.");
-						case UserState.Deleted: throw new ArgumentException("Invalid Account.");
-						default: throw new ArgumentException("Unknown user state!");
-					}
-					user.InvalidLogonTries = 0;
-					user.LastUpdate = DateTime.UtcNow;
-					if (Users is IMemoryTable)
-					{
-						Users.TryUpdate(user);
-					}
-					else
-					{
-						Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
-					}
-					return true;
-				}
-				user.InvalidLogonTries++;
-				user.LastUpdate = DateTime.UtcNow;
-				if (Users is IMemoryTable)
-				{
-					Users.TryUpdate(user);
-				}
-				else
-				{
-					Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
-				}
-			}
-			user = default(User);
-			email = default(EmailAddress);
-			return false;
-		}
+
+        /// <summary>Performs a login checking the password.</summary>
+        /// <param name="login">The login.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="user">The user.</param>
+        /// <param name="email">The email.</param>
+        /// <returns></returns>
+        public bool Login(string login, string password, out User user, out EmailAddress email)
+        {
+            List<EmailAddress> emailAddresses = EmailAddresses.GetStructs(
+                Search.FieldEquals(nameof(EmailAddress.Address), login) &
+                Search.FieldEquals(nameof(EmailAddress.Verified), true));
+            foreach (EmailAddress emailAddress in emailAddresses)
+            {
+                user = Users.TryGetStruct(emailAddress.UserID);
+                if (user.ID == 0)
+                {
+                    EmailAddresses.Delete(emailAddress.ID);
+                    continue;
+                }
+                if (user.TestPassword(password))
+                {
+                    email = emailAddress;
+                    switch (user.State)
+                    {
+                        case UserState.PasswordResetRequested: user.State = UserState.Confirmed; break;
+                        case UserState.Confirmed: break;
+                        case UserState.New: throw new ArgumentException("Account needs to be verified prior usage!");
+                        case UserState.Diabled: throw new ArgumentException("Account is disabled. Please contact support.");
+                        case UserState.Deleted: throw new ArgumentException("Invalid Account.");
+                        default: throw new ArgumentException("Unknown user state!");
+                    }
+                    if (email.VerificationCode != null)
+                    {
+                        email.VerificationCode = null;
+                        Task.Factory.StartNew((e) => EmailAddresses.TryUpdate((EmailAddress)e), email);
+                    }
+                    user.LastUpdate = DateTime.UtcNow;
+                    user.InvalidLogonTries = 0;
+                    Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
+                    return true;
+                }
+                user.InvalidLogonTries++;
+                user.LastUpdate = DateTime.UtcNow;
+                if (Users is IMemoryTable)
+                {
+                    Users.TryUpdate(user);
+                }
+                else
+                {
+                    Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
+                }
+            }
+            foreach (User userDataset in Users.GetStructs(nameof(User.NickName), login))
+            {
+                user = userDataset;
+                if (user.TestPassword(password))
+                {
+                    email = EmailAddresses.TryGetStruct(
+                        Search.FieldEquals(nameof(EmailAddress.UserID), user.ID) &
+                        Search.FieldEquals(nameof(EmailAddress.Verified), true));
+                    switch (user.State)
+                    {
+                        case UserState.PasswordResetRequested: user.State = UserState.Confirmed; break;
+                        case UserState.Confirmed: break;
+                        case UserState.New: throw new ArgumentException("Account needs to be verified prior usage!");
+                        case UserState.Diabled: throw new ArgumentException("Account is disabled. Please contact support.");
+                        case UserState.Deleted: throw new ArgumentException("Invalid Account.");
+                        default: throw new ArgumentException("Unknown user state!");
+                    }
+                    user.InvalidLogonTries = 0;
+                    user.LastUpdate = DateTime.UtcNow;
+                    if (Users is IMemoryTable)
+                    {
+                        Users.TryUpdate(user);
+                    }
+                    else
+                    {
+                        Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
+                    }
+                    return true;
+                }
+                user.InvalidLogonTries++;
+                user.LastUpdate = DateTime.UtcNow;
+                if (Users is IMemoryTable)
+                {
+                    Users.TryUpdate(user);
+                }
+                else
+                {
+                    Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
+                }
+            }
+            user = default(User);
+            email = default(EmailAddress);
+            return false;
+        }
 
         /// <summary>Gets the group membership.</summary>
         /// <param name="userID">The user identifier.</param>
@@ -598,7 +614,11 @@ namespace Cave.Auth
                 Search.FieldEquals(nameof(GroupMember.GroupID), groupID))
                 .ToArray();
 
-            if (members.Length == 1) return members[0];
+            if (members.Length == 1)
+            {
+                return members[0];
+            }
+
             return default(GroupMember);
         }
 
@@ -625,7 +645,11 @@ namespace Cave.Auth
             Set<long> groupIDs = GetUserGroups(userID);
             foreach (License lic in lics)
             {
-                if (lic.GroupID <= 0) continue;
+                if (lic.GroupID <= 0)
+                {
+                    continue;
+                }
+
                 if (groupIDs.Contains(lic.GroupID) && lic.ValidTill > DateTime.UtcNow)
                 {
                     license = lic;
@@ -669,9 +693,15 @@ namespace Cave.Auth
                     return DateTime.UtcNow < license.ValidTill;
                 }
                 //check if number of sessions is already reached
-                if (activeSessionLicenses.Count >= license.MaxSessions) return false;
+                if (activeSessionLicenses.Count >= license.MaxSessions)
+                {
+                    return false;
+                }
                 //check if number of users is already reached
-                if (activeSessionLicenses.Select(a => a.UserID).Distinct().Count() >= license.MaxUsers) return false;
+                if (activeSessionLicenses.Select(a => a.UserID).Distinct().Count() >= license.MaxUsers)
+                {
+                    return false;
+                }
                 //create license session
                 UserSessionLicenses.Insert(new UserSessionLicense()
                 {
