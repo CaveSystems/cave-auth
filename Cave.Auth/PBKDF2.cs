@@ -1,9 +1,11 @@
 using System;
 using System.IO;
-using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using Cave.IO;
+#if !NET20 && !NET35
+using System.Numerics;
+#endif
 
 namespace Cave.Auth
 {
@@ -45,7 +47,7 @@ namespace Cave.Auth
             return new PBKDF2(algorithm);
         }
 
-#if !NET20
+#if !NET20 && !NET35
         /// <summary>Creates a new instance using the specified private bigint as key and salt (last 16 bytes are used as salt).</summary>
         /// <remarks>In this function the number of iterations are set to 2 for performance reasons. This should not impact security if the private 
         /// is chosen and protected well.</remarks>
