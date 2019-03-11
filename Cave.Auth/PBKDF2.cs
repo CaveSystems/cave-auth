@@ -45,6 +45,7 @@ namespace Cave.Auth
             return new PBKDF2(algorithm);
         }
 
+#if !NET20
         /// <summary>Creates a new instance using the specified private bigint as key and salt (last 16 bytes are used as salt).</summary>
         /// <remarks>In this function the number of iterations are set to 2 for performance reasons. This should not impact security if the private 
         /// is chosen and protected well.</remarks>
@@ -64,6 +65,7 @@ namespace Cave.Auth
             byte[] salt = ArrayExtension.GetRange(data, l_Splitter);
             return new PBKDF2(l_Password, salt, 2);
         }
+#endif
 
         int m_Iterations = 1000;
         int m_HashNumber;

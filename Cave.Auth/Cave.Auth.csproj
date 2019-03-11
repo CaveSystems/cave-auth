@@ -1,52 +1,49 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <TargetFrameworks>netstandard2.0;net20;net35;net45;net46;net47</TargetFrameworks>
     <Authors>Andreas Rohleder</Authors>
     <Company>CaveSystems GmbH, Andreas Rohleder</Company>
-    <Product>CaveSystems Auth Library</Product>
-    <Copyright>(c) 2003-2018 Andreas Rohleder</Copyright>
-    <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.en.html</PackageLicenseUrl>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Cave.Auth.snk</AssemblyOriginatorKeyFile>
-    <Version>1.0.0</Version>
+    <Copyright>(c) 2003-$([System.DateTime]::UtcNow.Year) Andreas Rohleder</Copyright>
     <PackageIconUrl>https://www.cavesystems.de/favicon.ico</PackageIconUrl>
+    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <FileVersion>$([System.DateTime]::UtcNow.Year).$([System.DateTime]::UtcNow.ToString("MMdd")).$([System.DateTime]::UtcNow.ToString("HHmm")).$([System.DateTime]::UtcNow.ToString("ssfff"))</FileVersion>
+    <LangVersion>latest</LangVersion>
+    <!--project-->
+    <RootNamespace>Cave.Auth</RootNamespace>
+    <AssemblyOriginatorKeyFile>Cave.Auth.snk</AssemblyOriginatorKeyFile>
+    <Product>CaveSystems Auth Library</Product>
     <PackageTags>CaveSystems Auth</PackageTags>
-    <PackageProjectUrl>https://www.cavesystems.de</PackageProjectUrl>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <Description>CaveSystems Auth Bibliothek</Description>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Cave.Auth.xml</DocumentationFile>
+    <Description>CaveSystems Auth Bibliothek.</Description>
+    <PackageProjectUrl>https://github.com/CaveSystems/cave-base-x</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CaveSystems/cave-base-x</RepositoryUrl>
+    <!--settings-->
+    <PackageReleaseNotes />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <SignAssembly>true</SignAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>2018.1215.1223.1946</FileVersion>
+    <NeutralLanguage />
+    <DelaySign>false</DelaySign>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSymbolsInPackage>true</IncludeSymbolsInPackage>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
+    <DeterministicSourcePaths>false</DeterministicSourcePaths>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;DEBUG;</DefineConstants>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <IncludeSymbols>true</IncludeSymbols>
-    <IncludeSymbolsInPackage>true</IncludeSymbolsInPackage>
-    <EmbedSources>true</EmbedSources>
   </PropertyGroup>
-  <!-- Workaround for EmbedSources support, see https://github.com/dotnet/roslyn/issues/19127-->
-  <Target Condition="'$(Configuration)'=='Debug'" Name="PopulateEmbeddedFiles" AfterTargets="BeforeCompile" BeforeTargets="CoreCompile">
-    <ItemGroup>
-      <EmbeddedFiles Include="@(Compile)" />
-    </ItemGroup>
-  </Target>
   <PropertyGroup>
     <DefineConstants Condition=" !$(DefineConstants.Contains(';NET')) ">$(DefineConstants);NET$(TargetFramework.ToUpper().Replace("_", "").Replace(".", "").Replace("NET", ""))</DefineConstants>
     <DefineConstants Condition=" $(DefineConstants.Contains(';NET')) ">$(DefineConstants.Remove($(DefineConstants.LastIndexOf(";NET"))));NET$(TargetFramework.ToUpper().Replace("_", "").Replace(".", "").Replace("NET", ""))</DefineConstants>
-    <NeutralLanguage />
-    <RootNamespace>Cave.Auth</RootNamespace>
-    <DelaySign>false</DelaySign>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net40' OR '$(TargetFramework)'=='net45' OR '$(TargetFramework)'=='net46' OR '$(TargetFramework)'=='net471'">
     <Reference Include="System" />
@@ -71,14 +68,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20' OR '$(TargetFramework)'=='netstandard1.3'">
-    <PackageReference Include="Cave.Backports" Version="1.0.0" />
+    <PackageReference Include="Cave.Backports" Version="1.0.5" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Cave.Extensions" Version="1.0.0" />
-    <PackageReference Include="Cave.Data" Version="1.0.0" />
-    <PackageReference Include="Cave.IO" Version="1.0.0" />
-    <PackageReference Include="Cave.Mail" Version="1.0.0" />
-    <PackageReference Include="Cave.Net" Version="1.0.0" />
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
+  </ItemGroup>  
+  <ItemGroup>
+    <PackageReference Include="Cave.Extensions" Version="1.0.6" />
+    <PackageReference Include="Cave.Data" Version="1.0.5" />
+    <PackageReference Include="Cave.IO" Version="1.0.5" />
+    <PackageReference Include="Cave.Mail" Version="1.0.1" />
+    <PackageReference Include="Cave.Net" Version="1.0.4" />
   </ItemGroup>
 </Project>
