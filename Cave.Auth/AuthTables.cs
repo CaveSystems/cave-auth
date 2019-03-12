@@ -372,7 +372,7 @@ namespace Cave.Auth
         /// </exception>
         public void RequestPasswordReset(string emailAddress, out EmailAddress email, out User user)
         {
-            List<EmailAddress> addresses = EmailAddresses.GetStructs(nameof(EmailAddress.Address), emailAddress);
+            var addresses = EmailAddresses.GetStructs(nameof(EmailAddress.Address), emailAddress);
             if (addresses.Count > 1)
             {
                 throw new ArgumentException("Email address {0} not unique, please contact support!", emailAddress);
@@ -514,7 +514,7 @@ namespace Cave.Auth
         /// <returns></returns>
         public bool Login(string login, string password, out User user, out EmailAddress email)
         {
-            List<EmailAddress> emailAddresses = EmailAddresses.GetStructs(
+            var emailAddresses = EmailAddresses.GetStructs(
                 Search.FieldEquals(nameof(EmailAddress.Address), login) &
                 Search.FieldEquals(nameof(EmailAddress.Verified), true));
             foreach (EmailAddress emailAddress in emailAddresses)
@@ -677,7 +677,7 @@ namespace Cave.Auth
         /// <param name="license">The license.</param>
         /// <param name="activeSessionLicenses">The active session licenses.</param>
         /// <returns>Returns whether a free license could be acquired or false otherwise</returns>
-        public bool UseLicense(long userID, UserSession session, License license, out List<UserSessionLicense> activeSessionLicenses)
+        public bool UseLicense(long userID, UserSession session, License license, out IList<UserSessionLicense> activeSessionLicenses)
         {
             lock (UserSessionLicenses)
             {
