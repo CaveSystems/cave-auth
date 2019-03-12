@@ -80,8 +80,8 @@
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
   </ItemGroup>  
   <ItemGroup>
-    <PackageReference Include="Cave.Extensions" Version="1.0.6" />
-    <PackageReference Include="Cave.Data" Version="1.0.5" />
+    <PackageReference Include="Cave.Extensions" Version="1.0.7" />
+    <PackageReference Include="Cave.Data" Version="1.0.6" />
     <PackageReference Include="Cave.IO" Version="1.0.5" />
     <PackageReference Include="Cave.Mail" Version="1.0.1" />
     <PackageReference Include="Cave.Net" Version="1.0.4" />
