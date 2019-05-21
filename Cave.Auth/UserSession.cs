@@ -43,7 +43,9 @@ namespace Cave.Auth
         /// <summary>
         /// Provides additional flags for the session
         /// </summary>
-        [Field]
+        /// <remarks>
+        /// This flag shall not be saved to a database!
+        /// </remarks>
         public UserSessionFlags Flags;
 
         /// <summary>Gets a value indicating whether this instance is expired.</summary>
