@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Cave.Collections.Generic;
 using Cave.Data;
 
@@ -11,278 +10,112 @@ namespace Cave.Auth
     /// <summary>
     /// Provides user validation tables and functions
     /// </summary>
-    public class AuthTables : TableConnector
+    public class AuthTables
     {
         //TODO use better RNG implementation
-        internal static readonly Random RNG = new Random();
+        internal static readonly Random RNG = new();
 
-        #region Initialization, private implementation and checks
-        private ITable<User> m_Users;
-        private ITable<UserDetail> m_UserDetails;
-        private ITable<UserSession> m_UserSessions;
-        private ITable<UserSessionData> m_UserSessionData;
-        private ITable<UserSessionLicense> m_UserSessionLicenses;
-        private ITable<License> m_Licenses;
-        private ITable<Group> m_Groups;
-        private ITable<GroupMember> m_GroupMembers;
-        private ITable<PhoneNumber> m_PhoneNumbers;
-        private ITable<EmailAddress> m_EmailAddresses;
-        private ITable<Address> m_Addresses;
-        private ITable<Country> m_Countries;
-        private ITable<Software> m_Software;
-        private ITable<UserConfiguration> m_UserConfigurations;
-        private ITable<SoftwareSession> m_SoftwareSessions;
-
-        /// <summary>Accesses the users table.</summary>
-        /// <value>The users.</value>
-        public ITable<User> Users
+        /// <summary>Initializes this instance.</summary>
+        public AuthTables(IDatabase database, TableFlags flags)
         {
-            get
-            {
-                if (m_Users == null)
-                {
-                    ConnectTable(ref m_Users);
-                }
-
-                return m_Users;
-            }
+            Users = database.GetTable<long, User>(flags: flags);
+            UserConfigurations = database.GetTable<long, UserConfiguration>(flags: flags);
+            UserDetails = database.GetTable<long, UserDetail>(flags: flags);
+            UserSessions = database.GetTable<long, UserSession>(flags: flags);
+            UserSessionData = database.GetTable<long, UserSessionData>(flags: flags);
+            UserSessionLicenses = database.GetTable<long, UserSessionLicense>(flags: flags);
+            Licenses = database.GetTable<long, License>(flags: flags);
+            Groups = database.GetTable<long, Group>(flags: flags);
+            GroupMembers = database.GetTable<long, GroupMember>(flags: flags);
+            PhoneNumbers = database.GetTable<long, PhoneNumber>(flags: flags);
+            EmailAddresses = database.GetTable<long, EmailAddress>(flags: flags);
+            Addresses = database.GetTable<long, Address>(flags: flags);
+            Countries = database.GetTable<long, Country>(flags: flags);
+            Software = database.GetTable<long, Software>(flags: flags);
+            SoftwareSessions = database.GetTable<long, SoftwareSession>(flags: flags);
         }
 
         /// <summary>Accesses the users table.</summary>
         /// <value>The users.</value>
-        public ITable<UserConfiguration> UserConfigurations
-        {
-            get
-            {
-                if (m_UserConfigurations == null)
-                {
-                    ConnectTable(ref m_UserConfigurations);
-                }
+        public ITable<long, User> Users { get; }
 
-                return m_UserConfigurations;
-            }
-        }
+        /// <summary>Accesses the users table.</summary>
+        /// <value>The users.</value>
+        public ITable<long, UserConfiguration> UserConfigurations { get; }
 
         /// <summary>Accesses the user details table.</summary>
         /// <value>The user details.</value>
-        public ITable<UserDetail> UserDetails
-        {
-            get
-            {
-                if (m_UserDetails == null)
-                {
-                    ConnectTable(ref m_UserDetails);
-                }
-
-                return m_UserDetails;
-            }
-        }
+        public ITable<long, UserDetail> UserDetails { get; }
 
         /// <summary>Accesses the user session table.</summary>
         /// <value>The user sessions.</value>
-        public ITable<UserSession> UserSessions
-        {
-            get
-            {
-                if (m_UserSessions == null)
-                {
-                    ConnectTable(ref m_UserSessions);
-                }
-
-                return m_UserSessions;
-            }
-        }
+        public ITable<long, UserSession> UserSessions { get; }
 
         /// <summary>Accesses the user session data table.</summary>
         /// <value>The user session data.</value>
-        public ITable<UserSessionData> UserSessionData
-        {
-            get
-            {
-                if (m_UserSessionData == null)
-                {
-                    ConnectTable(ref m_UserSessionData);
-                }
-
-                return m_UserSessionData;
-            }
-        }
+        public ITable<long, UserSessionData> UserSessionData { get; }
 
         /// <summary>Accesses the user session license table.</summary>
         /// <value>The user session licenses.</value>
-        public ITable<UserSessionLicense> UserSessionLicenses
-        {
-            get
-            {
-                if (m_UserSessionLicenses == null)
-                {
-                    ConnectTable(ref m_UserSessionLicenses);
-                }
-
-                return m_UserSessionLicenses;
-            }
-        }
+        public ITable<long, UserSessionLicense> UserSessionLicenses { get; }
 
         /// <summary>Accesses the license table.</summary>
         /// <value>The licenses.</value>
-        public ITable<License> Licenses
-        {
-            get
-            {
-                if (m_Licenses == null)
-                {
-                    ConnectTable(ref m_Licenses);
-                }
-
-                return m_Licenses;
-            }
-        }
+        public ITable<long, License> Licenses { get; }
 
         /// <summary>Accesses the group table.</summary>
         /// <value>The groups.</value>
-        public ITable<Group> Groups
-        {
-            get
-            {
-                if (m_Groups == null)
-                {
-                    ConnectTable(ref m_Groups);
-                }
-
-                return m_Groups;
-            }
-        }
+        public ITable<long, Group> Groups { get; }
 
         /// <summary>Accesses the group table.</summary>
         /// <value>The groups.</value>
-        public ITable<GroupMember> GroupMembers
-        {
-            get
-            {
-                if (m_GroupMembers == null)
-                {
-                    ConnectTable(ref m_GroupMembers);
-                }
-
-                return m_GroupMembers;
-            }
-        }
+        public ITable<long, GroupMember> GroupMembers { get; }
 
         /// <summary>Accesses the phone numbers table.</summary>
         /// <value>The phone numbers.</value>
-        public ITable<PhoneNumber> PhoneNumbers
-        {
-            get
-            {
-                if (m_PhoneNumbers == null)
-                {
-                    ConnectTable(ref m_PhoneNumbers);
-                }
-
-                return m_PhoneNumbers;
-            }
-        }
+        public ITable<long, PhoneNumber> PhoneNumbers { get; }
 
         /// <summary>Accesses the email addresses table.</summary>
         /// <value>The email addresses.</value>
-        public ITable<EmailAddress> EmailAddresses
-        {
-            get
-            {
-                if (m_EmailAddresses == null)
-                {
-                    ConnectTable(ref m_EmailAddresses);
-                }
-
-                return m_EmailAddresses;
-            }
-        }
+        public ITable<long, EmailAddress> EmailAddresses { get; }
 
         /// <summary>Accesses the addresses table.</summary>
         /// <value>The addresses.</value>
-        public ITable<Address> Addresses
-        {
-            get
-            {
-                if (m_Addresses == null)
-                {
-                    ConnectTable(ref m_Addresses);
-                }
-
-                return m_Addresses;
-            }
-        }
+        public ITable<long, Address> Addresses { get; }
 
         /// <summary>Accesses the countries table.</summary>
         /// <value>The countries.</value>
-        public ITable<Country> Countries
-        {
-            get
-            {
-                if (m_Countries == null)
-                {
-                    ConnectTable(ref m_Countries);
-                }
-
-                return m_Countries;
-            }
-        }
+        public ITable<long, Country> Countries { get; }
 
         /// <summary>Accesses the countries table.</summary>
         /// <value>The countries.</value>
-        public ITable<Software> Software
-        {
-            get
-            {
-                if (m_Software == null)
-                {
-                    ConnectTable(ref m_Software);
-                }
-
-                return m_Software;
-            }
-        }
+        public ITable<long, Software> Software { get; }
 
         /// <summary>Accesses the software session table.</summary>
         /// <value>The software sessions.</value>
-        public ITable<SoftwareSession> SoftwareSessions
-        {
-            get
-            {
-                if (m_SoftwareSessions == null)
-                {
-                    ConnectTable(ref m_SoftwareSessions);
-                }
-
-                return m_SoftwareSessions;
-            }
-        }
-
-        /// <summary>Gets the name of the log source.</summary>
-        /// <value>The name of the log source.</value>
-        public override string LogSourceName => "AuthTables";
+        public ITable<long, SoftwareSession> SoftwareSessions { get; }
 
         /// <summary>
         /// Loads all .net cultures into the countries table
         /// </summary>
         public void LoadCultures()
         {
-            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-            if (m_Countries.RowCount != cultures.Length)
+            var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+            if (Countries.RowCount != cultures.Length)
             {
-                m_Countries.Clear();
-                foreach (CultureInfo c in cultures)
+                Countries.Clear();
+                foreach (var culture in cultures)
                 {
-                    string name = string.IsNullOrEmpty(c.Name) ? "-" : c.Name;
-                    m_Countries.Replace(new Country()
+                    var name = string.IsNullOrEmpty(culture.Name) ? "-" : culture.Name;
+                    Countries.Replace(new Country()
                     {
-                        ID = CaveSystemData.CalculateID(name),
-                        Code = (uint)c.LCID,
-                        ISO3 = c.ThreeLetterISOLanguageName,
-                        ISO2 = c.TwoLetterISOLanguageName,
-                        Name = c.Name,
-                        NativeName = c.NativeName,
-                        EnglishName = c.EnglishName,
+                        ID = (uint)culture.NativeName.GetHashCode(),
+                        Code = (uint)culture.LCID,
+                        ISO3 = culture.ThreeLetterISOLanguageName,
+                        ISO2 = culture.TwoLetterISOLanguageName,
+                        Name = name,
+                        NativeName = culture.NativeName,
+                        EnglishName = culture.EnglishName,
                     });
                 }
             }
@@ -290,18 +123,12 @@ namespace Cave.Auth
 
         /// <summary>Gets all tables of this instance.</summary>
         /// <value>The tables.</value>
-        public override ITable[] Tables => new ITable[]
-                {
-                    Users, Groups, GroupMembers, PhoneNumbers, EmailAddresses, Addresses, Countries, Software, SoftwareSessions,
-                    UserSessions, UserSessionData, UserSessionLicenses, Licenses, UserDetails, UserConfigurations,
-                };
-
-        /// <summary>Initializes this instance.</summary>
-        public AuthTables()
+        public ITable[] Tables => new ITable[]
         {
-        }
+            Users, Groups, GroupMembers, PhoneNumbers, EmailAddresses, Addresses, Countries, Software, SoftwareSessions,
+            UserSessions, UserSessionData, UserSessionLicenses, Licenses, UserDetails, UserConfigurations,
+        };
 
-        #endregion
 
         /// <summary>Creates a new user without password (unconfirmed user).</summary>
         /// <param name="userName">(Nick)Name of the user to create</param>
@@ -340,11 +167,11 @@ namespace Cave.Auth
             {
                 State = UserState.New,
                 NickName = userName,
-                AvatarID = (uint)(RNG.Next() << 1 ^ RNG.Next()),
+                AvatarID = (uint)((RNG.Next() << 1) ^ RNG.Next()),
                 Color = 0xFF000000 | (uint)RNG.Next(0, 0xFFFFFF),
             };
             user.SetRandomSalt();
-            user.ID = Users.Insert(user);
+            user = Users.Insert(user);
 
             if (string.IsNullOrEmpty(emailAddress))
             {
@@ -352,10 +179,10 @@ namespace Cave.Auth
             }
             else
             {
-                byte[] rndBytes = new byte[16];
+                var rndBytes = new byte[16];
                 RNG.NextBytes(rndBytes);
                 email = new EmailAddress() { UserID = user.ID, Address = emailAddress, VerificationCode = Base64.UrlChars.Encode(rndBytes), };
-                email.ID = EmailAddresses.Insert(email);
+                email = EmailAddresses.Insert(email);
             }
         }
 
@@ -375,14 +202,14 @@ namespace Cave.Auth
             var addresses = EmailAddresses.GetStructs(nameof(EmailAddress.Address), emailAddress);
             if (addresses.Count > 1)
             {
-                throw new ArgumentException("Email address {0} not unique, please contact support!", emailAddress);
+                throw new InvalidOperationException(string.Format("Email address {0} not unique, please contact support!", emailAddress));
             }
             if (addresses.Count == 1)
             {
                 email = addresses[0];
                 if (Users.TryGetStruct(email.UserID, out user))
                 {
-                    bool allowReset = false;
+                    bool allowReset;
                     switch (user.State)
                     {
                         case UserState.Confirmed: allowReset = true; break;
@@ -390,16 +217,16 @@ namespace Cave.Auth
                             allowReset = (DateTime.UtcNow > user.LastUpdate + TimeSpan.FromHours(1));
                             if (!allowReset)
                             {
-                                throw new ArgumentException("Password reset email was already sent within the last hour.");
+                                throw new InvalidOperationException("Password reset email was already sent within the last hour.");
                             }
                             break;
-                        default: throw new ArgumentNullException("Invalid user state!");
+                        default: throw new InvalidOperationException("Invalid user state!");
                     }
                     if (allowReset)
                     {
                         user.State = UserState.PasswordResetRequested;
                         user.LastUpdate = DateTime.UtcNow;
-                        byte[] rndBytes = new byte[16];
+                        var rndBytes = new byte[16];
                         RNG.NextBytes(rndBytes);
                         email.VerificationCode = Base64.UrlChars.Encode(rndBytes);
                         Users.Update(user);
@@ -408,7 +235,7 @@ namespace Cave.Auth
                     }
                 }
             }
-            throw new ArgumentException("Invalid Emailaddress!");
+            throw new InvalidOperationException("Invalid Emailaddress!");
         }
 
         /// <summary>Creates a new user with the given password.</summary>
@@ -425,19 +252,19 @@ namespace Cave.Auth
         {
             if (string.IsNullOrEmpty(userName))
             {
-                throw new ArgumentException("UserName or EmailAddress missing!");
+                throw new InvalidOperationException("UserName or EmailAddress missing!");
             }
             user = new User()
             {
                 State = state,
                 NickName = userName,
                 AuthLevel = level.ToInt32(CultureInfo.InvariantCulture),
-                AvatarID = (uint)(RNG.Next() << 1 ^ RNG.Next()),
+                AvatarID = (uint)((RNG.Next() << 1) ^ RNG.Next()),
                 Color = 0xFF000000 | (uint)RNG.Next(0, 0xFFFFFF),
             };
             user.SetRandomSalt();
             user.SetPassword(password);
-            user.ID = Users.Insert(user);
+            user = Users.Insert(user);
             if (string.IsNullOrEmpty(emailAddress))
             {
                 email = new EmailAddress();
@@ -450,25 +277,22 @@ namespace Cave.Auth
                     Address = emailAddress,
                     Verified = state == UserState.Confirmed,
                 };
-                email.ID = EmailAddresses.Insert(email);
+                email = EmailAddresses.Insert(email);
             }
         }
 
         /// <summary>Gets the user licenses.</summary>
         /// <param name="userID">The user identifier.</param>
         /// <returns></returns>
-        public License[] GetUserLicenses(long userID)
-        {
-            return Licenses.GetStructs(Search.FieldEquals(nameof(License.UserID), userID)).ToArray();
-        }
+        public License[] GetUserLicenses(long userID) => Licenses.GetStructs(Search.FieldEquals(nameof(License.UserID), userID)).ToArray();
 
         /// <summary>Gets the group licenses.</summary>
         /// <param name="groupIDs">The group i ds.</param>
         /// <returns></returns>
         public License[] GetGroupLicenses(IEnumerable<long> groupIDs)
         {
-            Search search = Search.None;
-            foreach (long groupID in groupIDs)
+            var search = Search.None;
+            foreach (var groupID in groupIDs)
             {
                 search |= Search.FieldEquals(nameof(License.GroupID), groupID);
             }
@@ -500,9 +324,9 @@ namespace Cave.Auth
         /// <returns></returns>
         public bool TryAddNewEmail(ref EmailAddress email)
         {
-            long id = EmailAddresses.FindRow("Address", email.Address);
-            if (id > 0) { return false; }
-            email.ID = EmailAddresses.Insert(email);
+            var rows = EmailAddresses.GetStructs("Address", email.Address);
+            if (rows.Count > 0) { return false; }
+            email = EmailAddresses.Insert(email);
             return true;
         }
 
@@ -517,10 +341,9 @@ namespace Cave.Auth
             var emailAddresses = EmailAddresses.GetStructs(
                 Search.FieldEquals(nameof(EmailAddress.Address), login) &
                 Search.FieldEquals(nameof(EmailAddress.Verified), true));
-            foreach (EmailAddress emailAddress in emailAddresses)
+            foreach (var emailAddress in emailAddresses)
             {
-                user = Users.TryGetStruct(emailAddress.UserID);
-                if (user.ID == 0)
+                if (!Users.TryGetStruct(emailAddress.UserID, out user) || user.ID == 0)
                 {
                     EmailAddresses.Delete(emailAddress.ID);
                     continue;
@@ -540,32 +363,25 @@ namespace Cave.Auth
                     if (email.VerificationCode != null)
                     {
                         email.VerificationCode = null;
-                        Task.Factory.StartNew((e) => EmailAddresses.TryUpdate((EmailAddress)e), email);
+                        EmailAddresses.TryUpdate(email);
                     }
                     user.LastUpdate = DateTime.UtcNow;
                     user.InvalidLogonTries = 0;
-                    Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
+                    Users.TryUpdate(user);
                     return true;
                 }
                 user.InvalidLogonTries++;
                 user.LastUpdate = DateTime.UtcNow;
-                if (Users is IMemoryTable)
-                {
-                    Users.TryUpdate(user);
-                }
-                else
-                {
-                    Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
-                }
+                Users.TryUpdate(user);
             }
-            foreach (User userDataset in Users.GetStructs(nameof(User.NickName), login))
+            foreach (var userDataset in Users.GetStructs(nameof(User.NickName), login))
             {
                 user = userDataset;
                 if (user.TestPassword(password))
                 {
-                    email = EmailAddresses.TryGetStruct(
+                    email = EmailAddresses.GetStructs(
                         Search.FieldEquals(nameof(EmailAddress.UserID), user.ID) &
-                        Search.FieldEquals(nameof(EmailAddress.Verified), true));
+                        Search.FieldEquals(nameof(EmailAddress.Verified), true)).SingleOrDefault();
                     switch (user.State)
                     {
                         case UserState.PasswordResetRequested: user.State = UserState.Confirmed; break;
@@ -577,29 +393,15 @@ namespace Cave.Auth
                     }
                     user.InvalidLogonTries = 0;
                     user.LastUpdate = DateTime.UtcNow;
-                    if (Users is IMemoryTable)
-                    {
-                        Users.TryUpdate(user);
-                    }
-                    else
-                    {
-                        Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
-                    }
+                    Users.TryUpdate(user);
                     return true;
                 }
                 user.InvalidLogonTries++;
                 user.LastUpdate = DateTime.UtcNow;
-                if (Users is IMemoryTable)
-                {
-                    Users.TryUpdate(user);
-                }
-                else
-                {
-                    Task.Factory.StartNew((u) => Users.TryUpdate((User)u), user);
-                }
+                Users.TryUpdate(user);
             }
-            user = default(User);
-            email = default(EmailAddress);
+            user = default;
+            email = default;
             return false;
         }
 
@@ -609,7 +411,7 @@ namespace Cave.Auth
         /// <returns></returns>
         public GroupMember GetGroupMembership(long userID, long groupID)
         {
-            GroupMember[] members = GroupMembers.GetStructs(
+            var members = GroupMembers.GetStructs(
                 Search.FieldEquals(nameof(GroupMember.UserID), userID) &
                 Search.FieldEquals(nameof(GroupMember.GroupID), groupID))
                 .ToArray();
@@ -619,7 +421,7 @@ namespace Cave.Auth
                 return members[0];
             }
 
-            return default(GroupMember);
+            return default;
         }
 
         /// <summary>Finds a valid license.</summary>
@@ -629,10 +431,10 @@ namespace Cave.Auth
         /// <returns></returns>
         public bool FindLicense(long softwareID, long userID, out License license)
         {
-            License[] lics = Licenses.GetStructs(nameof(License.SoftwareID), softwareID).ToArray();
+            var lics = Licenses.GetStructs(nameof(License.SoftwareID), softwareID).ToArray();
 
             //find the first valid license the user is owner of
-            foreach (License lic in lics)
+            foreach (var lic in lics)
             {
                 if (lic.UserID == userID && lic.ValidTill > DateTime.UtcNow)
                 {
@@ -642,8 +444,8 @@ namespace Cave.Auth
             }
 
             //check if the user is part of a group license
-            Set<long> groupIDs = GetUserGroups(userID);
-            foreach (License lic in lics)
+            var groupIDs = GetUserGroups(userID);
+            foreach (var lic in lics)
             {
                 if (lic.GroupID <= 0)
                 {
@@ -657,7 +459,7 @@ namespace Cave.Auth
                 }
             }
 
-            license = default(License);
+            license = default;
             return false;
         }
 
@@ -666,7 +468,7 @@ namespace Cave.Auth
         /// <returns></returns>
         public Set<long> GetUserGroups(long userID)
         {
-            Set<long> result = new Set<long>();
+            var result = new Set<long>();
             result.IncludeRange(GroupMembers.GetStructs(Search.FieldEquals(nameof(GroupMember.UserID), userID)).Select(gm => gm.GroupID));
             return result;
         }
@@ -684,7 +486,7 @@ namespace Cave.Auth
                 //get active sessions
                 activeSessionLicenses = UserSessionLicenses.GetStructs(nameof(UserSessionLicense.LicenseID), license.ID);
                 //check if users session has already an active license
-                UserSessionLicense myLicense = activeSessionLicenses.FirstOrDefault(s => s.UserSessionID == session.ID);
+                var myLicense = activeSessionLicenses.FirstOrDefault(s => s.UserSessionID == session.ID);
                 if (myLicense.ID > 0)
                 {
                     license = Licenses[myLicense.LicenseID];

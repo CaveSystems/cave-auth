@@ -65,9 +65,6 @@ namespace Cave.Auth
         /// Obtains a string describing this instance
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return "License" + ((ID > 0) ? "[" + ID + "] " : " ");
-        }
+        public override string ToString() => "License" + ((ID > 0) ? "[" + ID + "] " : " ");
     }
 }

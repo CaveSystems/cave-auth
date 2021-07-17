@@ -16,7 +16,7 @@ namespace Cave.Auth
         /// <returns></returns>
         public static IList<UserLevel> FromEnum(Type enumType)
         {
-            List<UserLevel> list = new List<UserLevel>();
+            var list = new List<UserLevel>();
             foreach (IConvertible level in Enum.GetValues(enumType))
             {
                 list.Add(new UserLevel() { Name = level.ToString(), ID = level.ToInt64(CultureInfo.InvariantCulture) });

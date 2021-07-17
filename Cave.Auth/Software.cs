@@ -49,7 +49,7 @@ namespace Cave.Auth
         /// <summary>Sets a new salt (32 bytes)</summary>
         public void SetRandomSalt()
         {
-            byte[] rndBytes = new byte[32];
+            var rndBytes = new byte[32];
             AuthTables.RNG.NextBytes(rndBytes);
             Salt = rndBytes;
         }
@@ -67,10 +67,8 @@ namespace Cave.Auth
         /// <returns>byte[] of generated PasswordBytes</returns>
         public byte[] GetPasswordBytes(string password)
         {
-            using (PBKDF2 derive = new PBKDF2(password, Salt))
-            {
-                return derive.GetBytes(64);
-            }
+            using var derive = new PBKDF2(password, Salt);
+            return derive.GetBytes(64);
         }
 
         /// <summary>Tests the password.</summary>
@@ -78,7 +76,7 @@ namespace Cave.Auth
         /// <returns></returns>
         public bool TestPassword(string password)
         {
-            byte[] data = GetPasswordBytes(password);
+            var data = GetPasswordBytes(password);
             return DefaultComparer.Equals(data, PasswordBytes);
         }
 
@@ -91,9 +89,6 @@ namespace Cave.Auth
 
         /// <summary>Returns a <see cref="System.String" /> that represents this instance.</summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
-        public override string ToString()
-        {
-            return $"[{ID}] {Name} {Version} {Base32.Safe.Encode(ProgramID)}";
-        }
+        public override string ToString() => $"[{ID}] {Name} {Version} {Base32.Safe.Encode(ProgramID)}";
     }
 }

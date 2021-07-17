@@ -92,7 +92,7 @@ namespace Cave.Auth
         /// <summary>Sets a new salt (32 bytes)</summary>
         public void SetRandomSalt()
         {
-            byte[] rndBytes = new byte[32];
+            var rndBytes = new byte[32];
             AuthTables.RNG.NextBytes(rndBytes);
             Salt = rndBytes;
             LastUpdate = DateTime.UtcNow;
@@ -103,10 +103,8 @@ namespace Cave.Auth
         /// <returns>byte[] of generated PasswordBytes</returns>
         public byte[] GetPasswordBytes(string password)
         {
-            using (PBKDF2 derive = new PBKDF2(password, Salt))
-            {
-                return derive.GetBytes(64);
-            }
+            using var derive = new PBKDF2(password, Salt);
+            return derive.GetBytes(64);
         }
 
         /// <summary>Change password after checking the old one</summary>
@@ -127,7 +125,7 @@ namespace Cave.Auth
         /// <returns></returns>
         public bool TestPassword(string password)
         {
-            byte[] data = GetPasswordBytes(password);
+            var data = GetPasswordBytes(password);
             return DefaultComparer.Equals(data, PasswordBytes);
         }
 
@@ -154,26 +152,20 @@ namespace Cave.Auth
 
         /// <summary>Obtains a string describing this instance</summary>
         /// <returns>A <see cref="string" /> that represents this instance.</returns>
-        public override string ToString()
-        {
-            return ((ID > 0) ? "[" + ID + "] " : "") + State + " " + NickName;
-        }
+        public override string ToString() => ((ID > 0) ? "[" + ID + "] " : "") + State + " " + NickName;
 
         /// <summary>Returns a hash code for this instance.</summary>
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. </returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
 
         /// <summary>Determines whether the specified <see cref="object" />, is equal to this instance.</summary>
         /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
-            if (obj is User)
+            if (obj is User user)
             {
-                return base.Equals((User)obj);
+                return base.Equals(user);
             }
 
             return false;

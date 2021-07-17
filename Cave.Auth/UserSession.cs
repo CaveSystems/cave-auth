@@ -52,26 +52,17 @@ namespace Cave.Auth
         /// <value>
         /// <c>true</c> if this instance is expired; otherwise, <c>false</c>.
         /// </value>
-        public bool IsExpired()
-        {
-            return DateTime.UtcNow > Expiration;
-        }
+        public bool IsExpired() => DateTime.UtcNow > Expiration;
 
         /// <summary>Returns true if this instance is valid.</summary>
         /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
-        public bool IsValid()
-        {
-            return Source != null & UserAgent != null && !IsExpired();
-        }
+        public bool IsValid() => Source != null & UserAgent != null && !IsExpired();
 
         /// <summary>Gets a value indicating whether this instance is authenticated.</summary>
         /// <value>
         /// <c>true</c> if this instance is authenticated; otherwise, <c>false</c>.
         /// </value>
-        public bool IsAuthenticated()
-        {
-            return UserID > 0 && IsValid();
-        }
+        public bool IsAuthenticated() => UserID > 0 && IsValid();
 
         /// <summary>
         /// Obtains a string describing this instance
@@ -79,7 +70,7 @@ namespace Cave.Auth
         /// <returns></returns>
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("UserSession");
             builder.AppendFormat(" {0}", StringID);
             if (IsAuthenticated())

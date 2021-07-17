@@ -70,19 +70,16 @@ namespace Cave.Auth
 
         /// <summary>Returns a hash code for this instance.</summary>
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. </returns>
-        public override int GetHashCode()
-        {
-            return CountryID.GetHashCode() ^ Prefix.GetHashCode() ^ Number.GetHashCode();
-        }
+        public override int GetHashCode() => CountryID.GetHashCode() ^ Prefix.GetHashCode() ^ Number.GetHashCode();
 
         /// <summary>Determines whether the specified <see cref="object" />, is equal to this instance.</summary>
         /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
-            if (obj is PhoneNumber)
+            if (obj is PhoneNumber number)
             {
-                return base.Equals((PhoneNumber)obj);
+                return base.Equals(number);
             }
 
             return false;
@@ -102,9 +99,6 @@ namespace Cave.Auth
         /// Obtains a string describing this instance
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return $"PhoneNumber {CountryID} {Prefix} {Number}";
-        }
+        public override string ToString() => $"PhoneNumber {CountryID} {Prefix} {Number}";
     }
 }

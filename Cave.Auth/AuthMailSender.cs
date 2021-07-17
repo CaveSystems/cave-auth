@@ -10,12 +10,13 @@ namespace Cave.Auth
     /// <seealso cref="MailSender" />
     public class AuthMailSender : MailSender
     {
-        string Welcome;
-        string JoinGroup;
+        public string WelcomeMessage { get; set; }
+
+        public string JoinGroupMessage { get; set; }
 
         /// <summary>Initializes a new instance of the <see cref="AuthMailSender"/> class.</summary>
         /// <param name="settings">The settings.</param>
-        public AuthMailSender(ISettings settings) : base(settings)
+        public AuthMailSender(IniReader settings) : base(settings)
         {
             try
             {
@@ -24,23 +25,23 @@ namespace Cave.Auth
                     throw new ArgumentNullException(nameof(settings));
                 }
                 //load defaults
-                IniReader def = IniReader.Parse("AuthMessages.ini", Properties.Resources.AuthMessages);
-                Welcome = def.ReadSection("MSG:Welcome", true).JoinNewLine();
-                JoinGroup = def.ReadSection("MSG:JoinGroup", true).JoinNewLine();
+                var def = IniReader.Parse("AuthMessages.ini", Properties.Resources.AuthMessages);
+                WelcomeMessage = def.ReadSection("MSG:Welcome", true).JoinNewLine();
+                JoinGroupMessage = def.ReadSection("MSG:JoinGroup", true).JoinNewLine();
                 //load from ini
                 if (settings.HasSection("MSG:Welcome"))
                 {
-                    Welcome = settings.ReadSection("MSG:Welcome", true).JoinNewLine();
+                    WelcomeMessage = settings.ReadSection("MSG:Welcome", true).JoinNewLine();
                 }
 
                 if (settings.HasSection("MSG:JoinGroup"))
                 {
-                    JoinGroup = settings.ReadSection("MSG:JoinGroup", true).JoinNewLine();
+                    JoinGroupMessage = settings.ReadSection("MSG:JoinGroup", true).JoinNewLine();
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format("Error while loading configuration from {0}", settings.Name), ex);
+                throw new Exception(string.Format("Error while loading configuration from {0}", settings), ex);
             }
         }
 
@@ -50,11 +51,11 @@ namespace Cave.Auth
         /// <returns>Returns true if the email was sent, false otherwise.</returns>
         public bool SendAuthMessage(User user, EmailAddress email)
         {
-            MailMessage message = new MailMessage();
+            var message = new MailMessage();
             message.To.Add(email.Address);
             message.Subject = "Registration";
             message.IsBodyHtml = true;
-            message.Body = Ini.LocalMachineIniFile.ReadSection("MSG::Welcome").JoinNewLine().
+            message.Body = WelcomeMessage.
                 Replace("%NickName%", user.NickName).
                 Replace("%EmailAddress%", email.Address).
                 Replace("%Code%", email.VerificationCode);
@@ -69,11 +70,11 @@ namespace Cave.Auth
         /// <returns>Returns true if the email was sent, false otherwise.</returns>
         public bool SendGroupInvitationMessage(User groupAdmin, MailAddress email, User user, Group group)
         {
-            MailMessage message = new MailMessage();
+            var message = new MailMessage();
             message.To.Add(email);
             message.Subject = "Group Join";
             message.IsBodyHtml = true;
-            message.Body = Ini.LocalMachineIniFile.ReadSection("MSG::JoinGroup").JoinNewLine().
+            message.Body =JoinGroupMessage.
                 Replace("%GroupAdmin%", groupAdmin.NickName).
                 Replace("%NickName%", user.NickName).
                 Replace("%GroupName%", group.Name).

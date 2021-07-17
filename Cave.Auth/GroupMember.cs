@@ -54,19 +54,16 @@ namespace Cave.Auth
 
         /// <summary>Returns a hash code for this instance.</summary>
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. </returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
 
         /// <summary>Determines whether the specified <see cref="object" />, is equal to this instance.</summary>
         /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
-            if (obj is GroupMember)
+            if (obj is GroupMember member)
             {
-                return base.Equals((GroupMember)obj);
+                return base.Equals(member);
             }
 
             return false;
@@ -75,9 +72,6 @@ namespace Cave.Auth
         /// <summary>Determines whether the specified <see cref="GroupMember" />, is equal to this instance.</summary>
         /// <param name="other">The <see cref="GroupMember" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="GroupMember" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(GroupMember other)
-        {
-            return other.GroupID == GroupID && other.UserID == UserID;
-        }
+        public bool Equals(GroupMember other) => other.GroupID == GroupID && other.UserID == UserID;
     }
 }

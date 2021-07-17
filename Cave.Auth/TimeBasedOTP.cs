@@ -13,7 +13,7 @@ namespace Cave.Auth
     public class TimeBasedOTP
     {
         static long Ticks1970 { get; } = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks;
-        static SynchronizedDictionary<string, long> used = new SynchronizedDictionary<string, long>();
+        static SynchronizedDictionary<string, long> used = new();
 
         #region private class
 
@@ -21,15 +21,15 @@ namespace Cave.Auth
         /// <returns></returns>
         static long GetChallenge()
         {
-            long seconds = (DateTime.UtcNow.Ticks - Ticks1970) / TimeSpan.TicksPerSecond;
+            var seconds = (DateTime.UtcNow.Ticks - Ticks1970) / TimeSpan.TicksPerSecond;
             return seconds / Interval;
         }
 
         /// <summary>Cleans the (expired) used codes.</summary>
         static void CleanUsed()
         {
-            long start = GetChallenge() - DriftPast;
-            foreach (KeyValuePair<string, long> item in used.ToArray())
+            var start = GetChallenge() - DriftPast;
+            foreach (var item in used.ToArray())
             {
                 //throw away old used codes before drift
                 if (item.Value < start)
@@ -48,27 +48,27 @@ namespace Cave.Auth
         /// <returns></returns>
         static string GetCode(string secret, long challenge)
         {
-            byte[] challengeData = new byte[8];
-            for (int j = 7; j >= 0; j--)
+            var challengeData = new byte[8];
+            for (var j = 7; j >= 0; j--)
             {
                 challengeData[j] = (byte)((int)challenge & 0xff);
                 challenge >>= 8;
             }
 
             //truncate secret
-            byte[] key = Base32.OTP.Decode(secret.ToLower());
-            for (int i = secret.Length; i < key.Length; i++)
+            var key = Base32.OTP.Decode(secret.ToLower());
+            for (var i = secret.Length; i < key.Length; i++)
             {
                 key[i] = 0;
             }
 
-            HMACSHA1 mac = new HMACSHA1(key);
-            byte[] hash = mac.ComputeHash(challengeData);
+            var mac = new HMACSHA1(key);
+            var hash = mac.ComputeHash(challengeData);
 
-            int offset = hash[hash.Length - 1] & 0xf;
+            var offset = hash[hash.Length - 1] & 0xf;
 
-            int truncatedHash = 0;
-            for (int j = 0; j < 4; j++)
+            var truncatedHash = 0;
+            for (var j = 0; j < 4; j++)
             {
                 truncatedHash <<= 8;
                 truncatedHash |= hash[offset + j];
@@ -77,7 +77,7 @@ namespace Cave.Auth
             truncatedHash &= 0x7FFFFFFF;
             truncatedHash %= 1000000;
 
-            string code = truncatedHash.ToString();
+            var code = truncatedHash.ToString();
             return code.PadLeft(6, '0');
         }
 
@@ -103,7 +103,7 @@ namespace Cave.Auth
         /// <returns>The current code. </returns>
         public static string GetCurrentCode(string secret)
         {
-            long challenge = GetChallenge();
+            var challenge = GetChallenge();
             return GetCode(secret, challenge);
         }
 
@@ -119,8 +119,8 @@ namespace Cave.Auth
                 return false;
             }
 
-            long challenge = GetChallenge();
-            for (long i = challenge - DriftPast; i <= challenge + DriftFuture; i++)
+            var challenge = GetChallenge();
+            for (var i = challenge - DriftPast; i <= challenge + DriftFuture; i++)
             {
                 if (code == GetCode(secret, i))
                 {
@@ -158,9 +158,6 @@ namespace Cave.Auth
         /// <param name="product">The product.</param>
         /// <param name="size">The size.</param>
         /// <returns></returns>
-        public static byte[] DownloadGoogleQR(string secret, string company = null, string product = null, int size = 250)
-        {
-            return HttpConnection.Get(GetGoogleQRLink(secret, company, product, size));
-        }
+        public static byte[] DownloadGoogleQR(string secret, string company = null, string product = null, int size = 250) => HttpConnection.Get(GetGoogleQRLink(secret, company, product, size));
     }
 }

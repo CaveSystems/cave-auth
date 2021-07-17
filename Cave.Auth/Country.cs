@@ -13,19 +13,13 @@ namespace Cave.Auth
         /// <param name="country1">The country1.</param>
         /// <param name="country2">The country2.</param>
         /// <returns>The result of the operator.</returns>
-        public static bool operator ==(Country country1, Country country2)
-        {
-            return country1.ID == country2.ID;
-        }
+        public static bool operator ==(Country country1, Country country2) => country1.ID == country2.ID;
 
         /// <summary>Implements the operator !=.</summary>
         /// <param name="country1">The country1.</param>
         /// <param name="country2">The country2.</param>
         /// <returns>The result of the operator.</returns>
-        public static bool operator !=(Country country1, Country country2)
-        {
-            return country1.ID != country2.ID;
-        }
+        public static bool operator !=(Country country1, Country country2) => country1.ID != country2.ID;
 
         /// <summary>The identifier</summary>
         [Field(Flags = FieldFlags.AutoIncrement | FieldFlags.ID)]
@@ -62,26 +56,20 @@ namespace Cave.Auth
         /// Obtains a string describing this instance
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return $"Country {Name}";
-        }
+        public override string ToString() => $"Country {Name}";
 
         /// <summary>Returns a hash code for this instance.</summary>
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. </returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
 
         /// <summary>Determines whether the specified <see cref="object" />, is equal to this instance.</summary>
         /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
-            if (obj is Country)
+            if (obj is Country country)
             {
-                return base.Equals((Country)obj);
+                return base.Equals(country);
             }
 
             return false;
@@ -90,9 +78,6 @@ namespace Cave.Auth
         /// <summary>Determines whether the specified <see cref="Country" />, is equal to this instance.</summary>
         /// <param name="other">The <see cref="Country" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Country" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(Country other)
-        {
-            return other.ID == ID;
-        }
+        public bool Equals(Country other) => other.ID == ID;
     }
 }

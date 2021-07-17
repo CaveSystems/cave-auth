@@ -1,65 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net20;net35;net45;net46;net47</TargetFrameworks>
-    <Authors>Andreas Rohleder</Authors>
-    <Company>CaveSystems GmbH, Andreas Rohleder</Company>
-    <Copyright>(c) 2003-$([System.DateTime]::UtcNow.Year) Andreas Rohleder</Copyright>
-    <PackageIconUrl>https://www.cavesystems.de/favicon.ico</PackageIconUrl>
-    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <FileVersion>$([System.DateTime]::UtcNow.Year).$([System.DateTime]::UtcNow.ToString("MMdd")).$([System.DateTime]::UtcNow.ToString("HHmm")).$([System.DateTime]::UtcNow.ToString("ssfff"))</FileVersion>
-    <LangVersion>latest</LangVersion>
     <!--project-->
     <RootNamespace>Cave.Auth</RootNamespace>
     <AssemblyOriginatorKeyFile>Cave.Auth.snk</AssemblyOriginatorKeyFile>
     <Product>CaveSystems Auth Library</Product>
     <PackageTags>CaveSystems Auth</PackageTags>
     <Description>CaveSystems Auth Bibliothek.</Description>
-    <PackageProjectUrl>https://github.com/CaveSystems/cave-base-x</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/CaveSystems/cave-base-x</RepositoryUrl>
-    <!--settings-->
-    <PackageReleaseNotes />
+    <PackageProjectUrl>https://github.com/CaveSystems/cave-auth</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CaveSystems/cave-auth</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <SignAssembly>true</SignAssembly>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NeutralLanguage />
-    <DelaySign>false</DelaySign>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <IncludeSymbols>true</IncludeSymbols>
-    <IncludeSymbolsInPackage>true</IncludeSymbolsInPackage>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <Deterministic>true</Deterministic>
-    <DeterministicSourcePaths>false</DeterministicSourcePaths>
+    <PackageReleaseNotes />
+    <NeutralResourcesLanguage>en</NeutralResourcesLanguage>
+    <!--settings-->
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;DEBUG;</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants Condition=" !$(DefineConstants.Contains(';NET')) ">$(DefineConstants);NET$(TargetFramework.ToUpper().Replace("_", "").Replace(".", "").Replace("NET", ""))</DefineConstants>
-    <DefineConstants Condition=" $(DefineConstants.Contains(';NET')) ">$(DefineConstants.Remove($(DefineConstants.LastIndexOf(";NET"))));NET$(TargetFramework.ToUpper().Replace("_", "").Replace(".", "").Replace("NET", ""))</DefineConstants>
-  </PropertyGroup>
+  
   <ItemGroup Condition="'$(TargetFramework)'=='net40' OR '$(TargetFramework)'=='net45' OR '$(TargetFramework)'=='net46' OR '$(TargetFramework)'=='net471'">
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
+  
   <ItemGroup Condition="'$(TargetFramework)'=='net20' OR '$(TargetFramework)'=='net35'">
     <Reference Include="System" />
     <Reference Include="System.Web" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="stylecop.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -67,23 +40,24 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+  
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net20' OR '$(TargetFramework)'=='netstandard1.3'">
-    <PackageReference Include="Cave.Backports" Version="1.0.5" />
-  </ItemGroup>
+  
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
   </ItemGroup>  
+
   <ItemGroup>
-    <PackageReference Include="Cave.Extensions" Version="1.0.7" />
-    <PackageReference Include="Cave.Data" Version="1.0.6" />
-    <PackageReference Include="Cave.IO" Version="1.0.5" />
-    <PackageReference Include="Cave.Mail" Version="1.0.1" />
-    <PackageReference Include="Cave.Net" Version="1.0.4" />
+    <PackageReference Include="Cave.Extensions" Version="2.0.13" />
+    <PackageReference Include="Cave.Data" Version="2.0.11" />
+    <PackageReference Include="Cave.IO" Version="2.0.4" />
+    <PackageReference Include="Cave.Net" Version="2.0.1" />
+    <PackageReference Include="Cave.Mail" Version="2.0" />
+    <PackageReference Include="Cave.IniFile" Version="2.0.1" />
   </ItemGroup>
 </Project>

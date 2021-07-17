@@ -24,13 +24,13 @@ namespace Cave.Auth
         {
             if (data == null)
             {
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
             }
 
-            int result = 1;
-            for (int i = 1; i < data.Length; i++)
+            var result = 1;
+            for (var i = 1; i < data.Length; i++)
             {
-                int diff = Math.Abs(data[0] - data[1]);
+                var diff = Math.Abs(data[0] - data[1]);
                 while (diff > 0)
                 {
                     diff >>= 1;
@@ -42,10 +42,7 @@ namespace Cave.Auth
 
         /// <summary>Creates a new instance with the specified HMAC.</summary>
         /// <returns></returns>
-        public static PBKDF2 Create(HMAC algorithm)
-        {
-            return new PBKDF2(algorithm);
-        }
+        public static PBKDF2 Create(HMAC algorithm) => new(algorithm);
 
 #if !NET20 && !NET35
         /// <summary>Creates a new instance using the specified private bigint as key and salt (last 16 bytes are used as salt).</summary>
@@ -56,29 +53,26 @@ namespace Cave.Auth
         /// <exception cref="ArgumentException">BigInt has less than 32 bytes (256 bits)!</exception>
         public static PBKDF2 FromPrivate(BigInteger i)
         {
-            byte[] data = i.ToByteArray();
+            var data = i.ToByteArray();
             if (data.Length < 64)
             {
                 throw new ArgumentException("BigInt has less than 64 bytes (512 bits)!");
             }
 
-            int l_Splitter = data.Length / 2;
-            byte[] l_Password = ArrayExtension.GetRange(data, 0, l_Splitter);
-            byte[] salt = ArrayExtension.GetRange(data, l_Splitter);
+            var l_Splitter = data.Length / 2;
+            var l_Password = ArrayExtension.GetRange(data, 0, l_Splitter);
+            var salt = ArrayExtension.GetRange(data, l_Splitter);
             return new PBKDF2(l_Password, salt, 2);
         }
 #endif
 
-        int m_Iterations = 1000;
-        int m_HashNumber;
-        byte[] m_Salt;
-        HMAC m_Algorithm;
-        FifoBuffer m_Buffer;
+        int iterations = 1000;
+        int hashNumber;
+        byte[] salt;
+        HMAC algorithm;
+        FifoBuffer buffer;
 
-        PBKDF2(HMAC algorithm)
-        {
-            m_Algorithm = algorithm;
-        }
+        PBKDF2(HMAC algorithm) => this.algorithm = algorithm;
 
         /// <summary>Initializes a new instance of the <see cref="PBKDF2"/> class using the default <see cref="HMACSHA512"/> algorithm.</summary>
         public PBKDF2() : this(new HMACSHA512()) { }
@@ -107,44 +101,41 @@ namespace Cave.Auth
         /// <param name="iterations">The iterations. This value is not checked and allows invalid values!</param>
         public PBKDF2(byte[] password, byte[] salt, int iterations) : this(new HMACSHA512())
         {
-            m_Iterations = iterations;
+            this.iterations = iterations;
             SetPassword(password);
             SetSalt(salt);
         }
 
         void FillBuffer()
         {
-            int i = ++m_HashNumber;
-            byte[] s = new byte[m_Salt.Length + 4];
-            Buffer.BlockCopy(m_Salt, 0, s, 0, m_Salt.Length);
+            var i = ++hashNumber;
+            var s = new byte[salt.Length + 4];
+            Buffer.BlockCopy(salt, 0, s, 0, salt.Length);
             s[s.Length - 4] = (byte)(i >> 24);
             s[s.Length - 3] = (byte)(i >> 16);
             s[s.Length - 2] = (byte)(i >> 8);
             s[s.Length - 1] = (byte)i;
             // this is like j=0
-            byte[] u1 = m_Algorithm.ComputeHash(s);
-            byte[] data = u1;
+            var u1 = algorithm.ComputeHash(s);
+            var data = u1;
             // so we start at j=1
-            for (int j = 1; j < m_Iterations; j++)
+            for (var j = 1; j < iterations; j++)
             {
-                byte[] un = m_Algorithm.ComputeHash(data);
+                var un = algorithm.ComputeHash(data);
                 // xor
-                for (int k = 0; k < u1.Length; k++)
+                for (var k = 0; k < u1.Length; k++)
                 {
                     u1[k] = (byte)(u1[k] ^ un[k]);
                 }
 
                 data = un;
             }
-            m_Buffer.Enqueue(u1);
+            buffer.Enqueue(u1, true);
         }
 
         /// <summary>Sets the password.</summary>
         /// <param name="password">The password.</param>
-        public void SetPassword(string password)
-        {
-            SetPassword(Encoding.UTF8.GetBytes(password));
-        }
+        public void SetPassword(string password) => SetPassword(Encoding.UTF8.GetBytes(password));
 
         /// <summary>Gets or sets the iteration count.</summary>
         /// <value>The iteration count.</value>
@@ -152,10 +143,10 @@ namespace Cave.Auth
         /// <exception cref="ArgumentOutOfRangeException">IterationCount &lt; 1000</exception>
         public int IterationCount
         {
-            get => m_Iterations;
+            get => iterations;
             set
             {
-                if (m_Buffer != null)
+                if (buffer != null)
                 {
                     throw new InvalidOperationException(string.Format("Cannot change the {0} after calling GetBytes() the first time!", "IterationCount"));
                 }
@@ -165,7 +156,7 @@ namespace Cave.Auth
                     throw new ArgumentOutOfRangeException(nameof(value), "IterationCount < 1000");
                 }
 
-                m_Iterations = value;
+                iterations = value;
             }
         }
 
@@ -174,7 +165,7 @@ namespace Cave.Auth
         /// <exception cref="Exception"></exception>
         /// <exception cref="ArgumentNullException">Salt</exception>
         /// <exception cref="ArgumentException">Salt &lt; 8 bytes</exception>
-        public byte[] Salt => (byte[])m_Salt.Clone();
+        public byte[] Salt => (byte[])salt.Clone();
 
         /// <summary>Sets the salt.</summary>
         /// <param name="salt">The salt.</param>
@@ -183,22 +174,22 @@ namespace Cave.Auth
         /// <exception cref="System.ArgumentException">Salt &lt; 8 bytes;value</exception>
         public void SetSalt(byte[] salt)
         {
-            if (m_Buffer != null)
+            if (buffer != null)
             {
-                throw new InvalidOperationException(string.Format("Cannot change the {0} after calling GetBytes() the first time!", "Salt"));
+                throw new InvalidOperationException(string.Format("Cannot change parameter {0} after calling GetBytes() the first time!", nameof(salt)));
             }
 
             if (salt == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(salt));
             }
 
             if (salt.Length < 8)
             {
-                throw new ArgumentException("Salt < 8 bytes", "value");
+                throw new ArgumentException("Salt < 8 bytes", nameof(salt));
             }
 
-            m_Salt = (byte[])salt.Clone();
+            this.salt = (byte[])salt.Clone();
         }
 
         /// <summary>Gets or sets the password.</summary>
@@ -206,7 +197,7 @@ namespace Cave.Auth
         /// <exception cref="Exception"></exception>
         /// <exception cref="ArgumentNullException">Password</exception>
         /// <exception cref="ArgumentException">Password &lt; 8 bytes</exception>
-        public byte[] Password => (byte[])m_Algorithm.Key.Clone();
+        public byte[] Password => (byte[])algorithm.Key.Clone();
 
         /// <summary>Sets the password.</summary>
         /// <param name="password">The password.</param>
@@ -215,21 +206,21 @@ namespace Cave.Auth
         /// <exception cref="System.ArgumentException">Password &lt; 8 bytes;value</exception>
         public void SetPassword(byte[] password)
         {
-            if (m_Buffer != null)
+            if (buffer != null)
             {
-                throw new InvalidOperationException(string.Format("Cannot change the {0} after calling GetBytes() the first time!", "Password"));
+                throw new InvalidOperationException(string.Format("Cannot change parameter {0} after calling GetBytes() the first time!", nameof(password)));
             }
 
             if (password == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(password));
             }
 
-            m_Algorithm.Key = (byte[])password.Clone();
+            algorithm.Key = (byte[])password.Clone();
         }
 
         /// <summary>Returns the next pseudo-random one time pad with the specified number of bytes.</summary>
-        /// <param name="cb">Length of the byte buffer to retrieve.</param>
+        /// <param name="length">Length of the byte buffer to retrieve.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">Algorithm</exception>
         /// <exception cref="ArgumentException">
@@ -240,46 +231,46 @@ namespace Cave.Auth
         /// Password &lt; 8 bytes
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">Length</exception>
-        public override byte[] GetBytes(int cb)
+        public override byte[] GetBytes(int length)
         {
-            if (m_Algorithm == null)
+            if (algorithm == null)
             {
-                throw new InvalidDataException("Algorithm unset!");
+                throw new InvalidOperationException("Algorithm unset!");
             }
 
-            if (m_Iterations < 1)
+            if (iterations < 1)
             {
-                throw new ArgumentException("Iterations < 1");
+                throw new InvalidOperationException("Iterations < 1");
             }
 
-            if (m_Salt == null | m_Salt.Length < 8)
+            if (salt == null | salt.Length < 8)
             {
-                throw new ArgumentException("Salt < 8 bytes");
+                throw new InvalidOperationException("Salt < 8 bytes");
             }
 
-            if (cb < 1)
+            if (length < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(cb));
+                throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            if (m_Buffer == null)
+            if (buffer == null)
             {
-                m_Buffer = new FifoBuffer();
+                buffer = new FifoBuffer();
             }
             //enough data present ?
-            while (m_Buffer.Length < cb)
+            while (buffer.Length < length)
             {
                 //fill buffer
                 FillBuffer();
             }
-            return m_Buffer.Dequeue(cb);
+            return buffer.Dequeue(length);
         }
 
         /// <summary>Resets the state of the operation.</summary>
         public override void Reset()
         {
-            m_Buffer = null;
-            m_HashNumber = 0;
+            buffer = null;
+            hashNumber = 0;
         }
 
         /// <summary>Releases the unmanaged resources used by this instance and optionally releases the managed resources.</summary>
@@ -290,7 +281,7 @@ namespace Cave.Auth
             base.Dispose(disposing);
             if (disposing)
             {
-                (m_Algorithm as IDisposable).Dispose(); m_Algorithm = null;
+                (algorithm as IDisposable).Dispose(); algorithm = null;
             }
         }
 #elif NET35 || NET20
@@ -298,7 +289,7 @@ namespace Cave.Auth
         {
             if (disposing)
             {
-                (m_Algorithm as IDisposable).Dispose(); m_Algorithm = null;
+                (algorithm as IDisposable).Dispose(); algorithm = null;
             }
         }
 
