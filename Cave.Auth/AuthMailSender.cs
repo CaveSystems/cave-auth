@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Mail;
+using Cave.IO;
 using Cave.Mail;
 
 namespace Cave.Auth
@@ -10,14 +11,20 @@ namespace Cave.Auth
     /// <seealso cref="MailSender" />
     public class AuthMailSender : MailSender
     {
+        /// <summary>
+        /// Gets or sets the welcome message sent to users after registration.
+        /// </summary>
         public string WelcomeMessage { get; set; }
 
+        /// <summary>
+        /// Gets or sets the message sent to users after joining a group.
+        /// </summary>
         public string JoinGroupMessage { get; set; }
 
-        /// <summary>Initializes a new instance of the <see cref="AuthMailSender"/> class.</summary>
-        /// <param name="settings">The settings.</param>
-        public AuthMailSender(IniReader settings) : base(settings)
+        /// <inheritdoc/>
+        public override void LoadConfig(IniReader settings)
         {
+            base.LoadConfig(settings);
             try
             {
                 if (settings == null)
@@ -74,7 +81,7 @@ namespace Cave.Auth
             message.To.Add(email);
             message.Subject = "Group Join";
             message.IsBodyHtml = true;
-            message.Body =JoinGroupMessage.
+            message.Body = JoinGroupMessage.
                 Replace("%GroupAdmin%", groupAdmin.NickName).
                 Replace("%NickName%", user.NickName).
                 Replace("%GroupName%", group.Name).

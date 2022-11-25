@@ -87,8 +87,8 @@ namespace Cave.Auth
             PasswordBytes = null;
         }
 
-        /// <summary>Returns a <see cref="System.String" /> that represents this instance.</summary>
-        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        /// <summary>Returns a <see cref="string" /> that represents this instance.</summary>
+        /// <returns>A <see cref="string" /> that represents this instance.</returns>
         public override string ToString() => $"[{ID}] {Name} {Version} {Base32.Safe.Encode(ProgramID)}";
     }
 }

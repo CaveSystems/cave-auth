@@ -174,9 +174,7 @@ namespace Cave.Auth
         /// <summary>Determines whether the specified <see cref="User" />, is equal to this instance.</summary>
         /// <param name="other">The <see cref="User" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="User" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(User other)
-        {
-            return other.AvatarID == AvatarID
+        public bool Equals(User other) => other.AvatarID == AvatarID
                 && other.Color == Color
                 && other.InvalidLogonTries == InvalidLogonTries
                 && other.LastUpdate == LastUpdate
@@ -184,6 +182,5 @@ namespace Cave.Auth
                 && other.PasswordBytes == PasswordBytes
                 && other.Salt == Salt
                 && other.State == State;
-        }
     }
 }

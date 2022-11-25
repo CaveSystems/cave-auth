@@ -72,13 +72,9 @@ namespace Cave.Auth
         /// Obtains a string describing this instance
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return
-                "Email" +
+        public override string ToString() => "Email" +
                 ((ID > 0) ? "[" + ID + "] " : " ") +
                 ((!string.IsNullOrEmpty(Address)) ? Address : "<no address>");
-        }
 
         /// <summary>Returns a hash code for this instance.</summary>
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. </returns>
@@ -100,12 +96,9 @@ namespace Cave.Auth
         /// <summary>Determines whether the specified <see cref="EmailAddress" />, is equal to this instance.</summary>
         /// <param name="other">The <see cref="EmailAddress" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="EmailAddress" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(EmailAddress other)
-        {
-            return other.Address == Address
+        public bool Equals(EmailAddress other) => other.Address == Address
                 && other.UserID == UserID
                 && other.VerificationCode == VerificationCode
                 && other.Verified == Verified;
-        }
     }
 }

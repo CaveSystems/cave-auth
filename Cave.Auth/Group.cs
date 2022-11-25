@@ -71,11 +71,8 @@ namespace Cave.Auth
         /// <summary>Determines whether the specified <see cref="Group" />, is equal to this instance.</summary>
         /// <param name="other">The <see cref="Group" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Group" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(Group other)
-        {
-            return other.AvatarID == AvatarID
+        public bool Equals(Group other) => other.AvatarID == AvatarID
                 && other.Color == Color
                 && other.Name == Name;
-        }
     }
 }

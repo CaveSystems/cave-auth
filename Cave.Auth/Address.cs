@@ -64,25 +64,12 @@ namespace Cave.Auth
         /// <summary>Determines whether the specified <see cref="object" />, is equal to this instance.</summary>
         /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
-        {
-            if (obj is Address address)
-            {
-                return base.Equals(address);
-            }
-
-            return false;
-        }
+        public override bool Equals(object obj) => obj is Address address && Equals(address);
 
         /// <summary>Determines whether the specified <see cref="Address" />, is equal to this instance.</summary>
         /// <param name="other">The <see cref="Address" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Address" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(Address other)
-        {
-            return other.CountryID == CountryID
-                && other.Text == Text
-                && other.UserID == UserID;
-        }
+        public bool Equals(Address other) => other.CountryID == CountryID && other.Text == Text && other.UserID == UserID;
 
         /// <summary>Returns a hash code for this instance.</summary>
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. </returns>
@@ -92,13 +79,6 @@ namespace Cave.Auth
         /// Obtains a string describing this instance
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return
-                "Address" + ((ID > 0) ? "[" + ID + "]" : "") +
-                " User: " + UserID +
-                " Country: " + CountryID +
-                " Text: " + Text.ReplaceNewLine(", ");
-        }
+        public override string ToString() => $"Address{((ID > 0) ? "[" + ID + "]" : "")} User: {UserID} Country: {CountryID} Text: " + Text.ReplaceNewLine(", ");
     }
 }

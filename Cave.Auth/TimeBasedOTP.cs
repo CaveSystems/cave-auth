@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Cryptography;
 using Cave.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Cave.Auth
     public class TimeBasedOTP
     {
         static long Ticks1970 { get; } = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks;
-        static SynchronizedDictionary<string, long> used = new();
+        static readonly SynchronizedDictionary<string, long> used = new();
 
         #region private class
 
@@ -46,6 +47,7 @@ namespace Cave.Auth
         /// <param name="secret">The users secret.</param>
         /// <param name="challenge">The challenge.</param>
         /// <returns></returns>
+        [SuppressMessage("Security", "CA5350: HMACSHA1 required.")]
         static string GetCode(string secret, long challenge)
         {
             var challengeData = new byte[8];
@@ -139,17 +141,9 @@ namespace Cave.Auth
         /// <returns></returns>
         public static string GetGoogleQRLink(string secret, string company = null, string product = null, int size = 250)
         {
-            if (company == null)
-            {
-                company = AssemblyVersionInfo.Program.Company;
-            }
-
-            if (product == null)
-            {
-                product = AssemblyVersionInfo.Program.Product;
-            }
-
-            return $"https://chart.googleapis.com/chart?cht=qr&chs=500x500&chld=H&chl=otpauth://totp/{product}?secret={secret}%26issuer={company}";
+            company ??= AssemblyVersionInfo.Program.Company;
+            product ??= AssemblyVersionInfo.Program.Product;
+            return $"https://chart.googleapis.com/chart?cht=qr&chs={size}x{size}&chld=H&chl=otpauth://totp/{product}?secret={secret}%26issuer={company}";
         }
 
         /// <summary>Downloads the google QR image.</summary>

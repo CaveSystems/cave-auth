@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using Cave.IO;
@@ -220,7 +219,7 @@ namespace Cave.Auth
         }
 
         /// <summary>Returns the next pseudo-random one time pad with the specified number of bytes.</summary>
-        /// <param name="length">Length of the byte buffer to retrieve.</param>
+        /// <param name="cb">Length of the byte buffer to retrieve.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">Algorithm</exception>
         /// <exception cref="ArgumentException">
@@ -231,7 +230,7 @@ namespace Cave.Auth
         /// Password &lt; 8 bytes
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">Length</exception>
-        public override byte[] GetBytes(int length)
+        public override byte[] GetBytes(int cb)
         {
             if (algorithm == null)
             {
@@ -248,22 +247,19 @@ namespace Cave.Auth
                 throw new InvalidOperationException("Salt < 8 bytes");
             }
 
-            if (length < 1)
+            if (cb < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(length));
+                throw new ArgumentOutOfRangeException(nameof(cb));
             }
 
-            if (buffer == null)
-            {
-                buffer = new FifoBuffer();
-            }
+            buffer ??= new FifoBuffer();
             //enough data present ?
-            while (buffer.Length < length)
+            while (buffer.Length < cb)
             {
                 //fill buffer
                 FillBuffer();
             }
-            return buffer.Dequeue(length);
+            return buffer.Dequeue(cb);
         }
 
         /// <summary>Resets the state of the operation.</summary>
@@ -275,7 +271,7 @@ namespace Cave.Auth
 
         /// <summary>Releases the unmanaged resources used by this instance and optionally releases the managed resources.</summary>
         /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-#if NET40 || NET45 || NET46 || NET47 || NETSTANDARD20 || NETCOREAPP20
+#if NET40_OR_GREATER || NETSTANDARD2_0_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -285,7 +281,7 @@ namespace Cave.Auth
             }
         }
 #elif NET35 || NET20
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -298,8 +294,8 @@ namespace Cave.Auth
         /// </summary>
         public void Dispose()
         {
-	        Dispose(true);
-	        GC.SuppressFinalize(this);
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 #else
 #error No code defined for the current framework or NETXX version define missing!

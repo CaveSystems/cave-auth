@@ -88,12 +88,9 @@ namespace Cave.Auth
         /// <summary>Determines whether the specified <see cref="PhoneNumber" />, is equal to this instance.</summary>
         /// <param name="other">The <see cref="PhoneNumber" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="PhoneNumber" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(PhoneNumber other)
-        {
-            return other.Number == Number
+        public bool Equals(PhoneNumber other) => other.Number == Number
                 && other.UserID == UserID
                 && other.IsVerified == IsVerified;
-        }
 
         /// <summary>
         /// Obtains a string describing this instance
